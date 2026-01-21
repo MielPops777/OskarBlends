@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="OskarBlends — precision cuts" />
+  <title>OskarBlends — Barber</title>
+  <style>
+    :root{
+      --bg:#050608;
+      --bg-alt:#0b0d10;
+      --card:#111318;
+      --card-soft:#151821;
+      --border-soft:rgba(255,255,255,0.06);
+      --muted:#9aa0a6;
+      --accent:#d4b88f;
+      --accent-soft:rgba(212,184,143,0.12);
+      --text:#f7f7f8;
+      --danger:#ff4b4b;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:
+        radial-gradient(circle at top left,rgba(212,184,143,0.16),transparent 55%),
+        radial-gradient(circle at bottom right,rgba(212,184,143,0.12),transparent 55%),
+        linear-gradient(180deg,#050608,#050608 40%,#050608 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+    }
+
+    .page{
+      max-width:1080px;
+      margin:0 auto;
+      padding:24px 18px 40px;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:14px 18px;
+      border-radius:16px;
+      background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(0,0,0,0.7));
+      border:1px solid var(--border-soft);
+      backdrop-filter:blur(18px);
+      position:sticky;
+      top:12px;
+      z-index:10;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .logo-mark{
+      width:56px;
+      height:56px;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at 20% 0%,#fff,rgba(255,255,255,0) 55%),
+        linear-gradient(135deg,var(--accent),#b6885a);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#111;
+      font-weight:700;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      font-size:14px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .brand-text h1{
+      font-size:20px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+    }
+
+    .brand-text span{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:0.16em;
+      margin-top:2px;
+    }
+
+    nav{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      font-size:14px;
+    }
+
+    nav a{
+      color:var(--muted);
+      text-decoration:none;
+      position:relative;
+      padding-bottom:2px;
+    }
+
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:0;
+      width:0;
+      height:1px;
+      background:var(--accent);
+      transition:width 0.18s ease-out;
+    }
+
+    nav a:hover{
+      color:var(--text);
+    }
+
+    nav a:hover::after{
+      width:100%;
+    }
+
+    .edit-toggle{
+      font-size:12px;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid var(--border-soft);
+      background:rgba(0,0,0,0.4);
+      color:var(--muted);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .edit-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--border-soft);
+    }
+
+    .edit-toggle[data-editing="true"]{
+      color:#111;
+      background:var(--accent);
+      border-color:var(--accent);
+    }
+
+    .edit-toggle[data-editing="true"] .edit-dot{
+      background:#111;
+    }
+
+    main{
+      margin-top:22px;
+      display:grid;
+      grid-template-columns:minmax(0,2.1fr) minmax(0,1.4fr);
+      gap:22px;
+    }
+
+    .hero{
+      padding:22px 20px 20px;
+      border-radius:18px;
+      background:radial-gradient(circle at top left,rgba(212,184,143,0.18),transparent 60%),var(--card);
+      border:1px solid var(--border-soft);
+      box-shadow:0 18px 40px rgba(0,0,0,0.7);
+    }
+
+    .hero-kicker{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.18em;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .hero h2{
+      font-size:30px;
+      line-height:1.15;
+      margin-bottom:10px;
+    }
+
+    .hero-lead{
+      color:var(--muted);
+      font-size:14px;
+      max-width:420px;
+      margin-bottom:18px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:18px;
+    }
+
+    .btn-primary{
+      padding:10px 18px;
+      border-radius:999px;
+      border:none;
+      background:var(--accent);
+      color:#111;
+      font-weight:600;
+      font-size:14px;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.7);
+    }
+
+    .btn-primary span.icon{
+      font-size:16px;
+      line-height:1;
+    }
+
+    .btn-ghost{
+      padding:9px 14px;
+      border-radius:999px;
+      border:1px solid var(--border-soft);
+      background:rgba(0,0,0,0.4);
+      color:var(--muted);
+      font-size:13px;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .hero-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-top:6px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .hero-meta span{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .hero-meta span::before{
+      content:"";
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:var(--accent-soft);
+      border:1px solid var(--accent);
+    }
+
+    .card{
+      border-radius:16px;
+      background:var(--card-soft);
+      border:1px solid var(--border-soft);
+      padding:18px 18px 16px;
+    }
+
+    .card h3{
+      font-size:16px;
+      margin-bottom:8px;
+    }
+
+    .card p{
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .services-grid{
+      display:grid;
+      grid-template-columns:1.2fr 1fr;
+      gap:16px;
+      margin-top:10px;
+    }
+
+    .service-item{
+      padding:12px 12px 10px;
+      border-radius:12px;
+      background:rgba(0,0,0,0.45);
+      border:1px solid rgba(255,255,255,0.04);
+    }
+
+    .service-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:10px;
+      margin-bottom:4px;
+    }
+
+    .service-title{
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+      color:var(--muted);
+    }
+
+    .service-price{
+      font-size:20px;
+      font-weight:700;
+      color:var(--accent);
+    }
+
+    .service-desc{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .right-column{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .info-row{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      font-size:14px;
+    }
+
+    .info-label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.18em;
+      color:var(--muted);
+    }
+
+    .info-main{
+      font-size:15px;
+      font-weight:500;
+    }
+
+    .info-sub{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .hours-table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+      margin-top:6px;
+    }
+
+    .hours-table th,
+    .hours-table td{
+      padding:4px 0;
+      border-bottom:1px dashed rgba(255,255,255,0.04);
+    }
+
+    .hours-table th{
+      text-align:left;
+      color:var(--muted);
+      font-weight:400;
+      width:34%;
+    }
+
+    .hours-table td{
+      text-align:right;
+      color:var(--text);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:var(--accent);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.16em;
+    }
+
+    .badge-dot{
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:var(--accent);
+    }
+
+    .map-card{
+      margin-top:20px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid var(--border-soft);
+      background:var(--bg-alt);
+    }
+
+    .map-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:10px 14px 8px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .map-header strong{
+      color:var(--text);
+      font-size:13px;
+    }
+
+    .map-open{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:12px;
+      color:var(--accent);
+      text-decoration:none;
+    }
+
+    .map-open span.icon{
+      font-size:14px;
+    }
+
+    .map-square{
+      position:relative;
+      width:100%;
+      aspect-ratio:1 / 1;
+      border-top:1px solid var(--border-soft);
+      cursor:pointer;
+      overflow:hidden;
+    }
+
+    .map-square iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      pointer-events:none;
+    }
+
+    .map-overlay{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,0,0,0.55));
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      padding:10px 12px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .map-overlay-left{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .map-overlay-left strong{
+      color:var(--text);
+      font-size:13px;
+    }
+
+    .map-overlay-right{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(0,0,0,0.7);
+      border:1px solid rgba(255,255,255,0.12);
+      color:var(--accent);
+    }
+
+    footer{
+      margin-top:26px;
+      padding-top:16px;
+      border-top:1px solid rgba(255,255,255,0.06);
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:8px;
+    }
+
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+    }
+
+    footer a:hover{
+      color:var(--accent);
+    }
+
+    [data-editable="true"]{
+      outline:1px dashed transparent;
+      transition:outline-color 0.12s ease-out, background-color 0.12s ease-out;
+      border-radius:4px;
+    }
+
+    [data-editable="true"][data-editing="true"]{
+      outline-color:rgba(212,184,143,0.7);
+      background-color:rgba(212,184,143,0.04);
+    }
+
+    @media(max-width:880px){
+      header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+      nav{
+        width:100%;
+        justify-content:flex-start;
+        flex-wrap:wrap;
+      }
+      main{
+        grid-template-columns:1fr;
+      }
+      .hero{
+        order:-1;
+      }
+    }
+
+    @media(max-width:520px){
+      .page{
+        padding:18px 14px 30px;
+      }
+      header{
+        padding:12px 14px;
+      }
+      .hero{
+        padding:18px 14px 16px;
+      }
+      .services-grid{
+        grid-template-columns:1fr;
+      }
+      .map-overlay{
+        padding:8px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="logo-mark">OB</div>
+        <div class="brand-text">
+          <h1 data-editable="true" id="businessName">OskarBlends</h1>
+          <span>Barber</span>
+        </div>
+      </div>
+      <nav>
+        <a href="#services">Services</a>
+        <a href="#hours">Hours</a>
+        <a href="#location">Location</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="edit-toggle" id="toggleEdit" type="button" aria-pressed="false">
+        <span class="edit-dot"></span>
+        <span>Edit content</span>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-kicker">Precision • Detail • Consistency</div>
+        <h2 id="hero-title" data-editable="true">Sharp fades. Clean lines. Quiet confidence.</h2>
+        <p class="hero-lead" data-editable="true" id="heroLead">
+          A private chair in the heart of the city. One‑to‑one appointments, no rush, no noise—just focused craft.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">
+            <span class="icon">✂️</span>
+            <span>Book a trim</span>
+          </a>
+          <a href="tel:+35200000000" class="btn-ghost" id="callLink">
+            <span class="icon">📸</span>
+            <span data-editable="true" id="phoneDisplay">+352 000 000 00</span>
+          </a>
+        </div>
+
+        <div class="hero-meta">
+          <span data-editable="true" id="metaWalkins">By appointment • Limited walk‑ins</span>
+          <span data-editable="true" id="metaPayment">Cash & card accepted</span>
+        </div>
+
+        <section class="card" id="about" style="margin-top:18px;">
+          <h3>About the studio</h3>
+          <p data-editable="true" id="aboutText">
+           OskarBlends is focused on precision cuts, clean fades, and a calm, unhurried experience.
+          Every appointment includes fun vibes.
+          </p>
+        </section>
+
+       <section class="card" id="services" style="margin-top:16px;">
+  <div class="badge">
+    <span class="badge-dot"></span>
+    <span>Services & pricing</span>
+  </div>
+
+  <div class="services-grid">
+
+    <!-- Haircut -->
+    <div class="service-item">
+      <div class="service-header">
+        <div class="service-title">Haircut</div>
+        <div class="service-price" data-editable="true" id="priceHaircut">€15</div>
+      </div>
+      <p class="service-desc" data-editable="true" id="descHaircut">
+        Skin fade, taper, or classic cut
+      </p>
+    </div>
+
+    <!-- Beard Add-on -->
+    <div class="service-item">
+      <div class="service-header">
+        <div class="service-title">haircut + Beard</div>
+        <div class="service-price" data-editable="true" id="priceBeard">€20</div>
+      </div>
+      <p class="service-desc" data-editable="true" id="descBeard">
+        Beard trim, shaping, or full beard service
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+      <aside class="right-column">
+        <section class="card" id="hours">
+          <div class="info-row">
+            <div class="info-label">Opening hours</div>
+            <div class="info-main">By appointment</div>
+            <div class="info-sub">Same‑day slots subject to availability.</div>
+          </div>
+          <table class="hours-table">
+            <tbody>
+              <tr><th>Monday</th><td data-editable="true" id="mon">15:30 — 18:30</td></tr>
+              <tr><th>Tuesday</th><td data-editable="true" id="tue">15:30 — 17:30</td></tr>
+              <tr><th>Wednesday</th><td data-editable="true" id="wed">16:30 — 18:30</td></tr>
+              <tr><th>Thursday</th><td data-editable="true" id="thu">15:30 — 17:30</td></tr>
+              <tr><th>Friday</th><td data-editable="true" id="fri">16:30 — 18:30</td></tr>
+              <tr><th>Saturday</th><td data-editable="true" id="sat">11:00 — 18:00</td></tr>
+              <tr><th>Sunday</th><td data-editable="true" id="sun">11:00 — 18:00</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card" id="contact">
+          <div class="info-row">
+            <div class="info-label">Contact</div>
+            <div class="info-main" data-editable="true" id="contactPhone">+352 000 000 00</div>
+            <div class="info-sub" data-editable="true" id="contactEmail">oskar@example.com</div>
+          </div>
+          <div class="info-row" style="margin-top:10px;">
+            <div class="info-label">Studio address</div>
+            <div class="info-main" data-editable="true" id="addressLine">24 Rue Charles Bernhoeft</div>
+            <div class="info-sub" data-editable="true" id="addressCity">L-0000 Luxembourg</div>
+          </div>
+        </section>
+  Those is the exact coordinate where I cut (an outside bench)      
+  49°37'50.8"N 6°10'26.3"E
+
+
+  
+
+
+    <footer>
+      <div>© <span id="year"></span> <span id="footerName">OskarBlends</span>. All rights reserved.</div>
+      <div>Site built on a simple static template.</div>
+    </footer>
+  </div>
+
+  <script>
+    const editableIds = [
+      'businessName','heroLead','phoneDisplay','metaWalkins','metaPayment',
+      'aboutText','priceTrim','descTrim','priceFade','descFade',
+      'mon','tue','wed','thu','fri','sat','sun',
+      'contactPhone','contactEmail','addressLine','addressCity',
+      'locationNote','mapAddressLabel'
+    ];
+
+    const toggle = document.getElementById('toggleEdit');
+    let editing = false;
+
+    function loadSaved(){
+      editableIds.forEach(id=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+        const saved = localStorage.getItem('oskar_'+id);
+        if(saved !== null){
+          el.innerText = saved;
+        }
+      });
+      document.getElementById('year').innerText = new Date().getFullYear();
+      const businessName = document.getElementById('businessName')?.innerText || 'OskarBlends';
+      document.getElementById('footerName').innerText = businessName;
+      const phoneDisplay = document.getElementById('phoneDisplay')?.innerText || '';
+      const callLink = document.getElementById('callLink');
+      if(callLink && phoneDisplay){
+        const digits = phoneDisplay.replace(/\s+/g,'');
+        callLink.href = 'tel:'+digits;
+      }
+    }
+
+    function saveAll(){
+      editableIds.forEach(id=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+        localStorage.setItem('oskar_'+id, el.innerText.trim());
+      });
+    }
+
+    function setEditingState(isEditing){
+      editableIds.forEach(id=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+        if(isEditing){
+          el.setAttribute('contenteditable','true');
+          el.setAttribute('data-editing','true');
+        }else{
+          el.removeAttribute('contenteditable');
+          el.removeAttribute('data-editing');
+        }
+      });
+      toggle.dataset.editing = isEditing ? 'true' : 'false';
+      toggle.setAttribute('aria-pressed', isEditing ? 'true' : 'false');
+      toggle.querySelector('span:last-child').innerText = isEditing ? 'Save changes' : 'Edit content';
+    }
+
+    toggle.addEventListener('click', ()=>{
+      editing = !editing;
+      if(!editing){
+        saveAll();
+        loadSaved();
+      }
+      setEditingState(editing);
+    });
+
+    window.addEventListener('beforeunload', saveAll);
+    window.addEventListener('DOMContentLoaded', ()=>{
+      loadSaved();
+      setEditingState(false);
+    });
+
+    const mapSquare = document.getElementById('mapSquare');
+    const mapOpenLink = document.getElementById('mapOpenLink');
+
+    const mapsQuery = encodeURIComponent('24 Rue Charles Bernhoeft, Luxembourg');
+    const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + mapsQuery;
+
+    function openMaps(){
+      window.open(mapsUrl, '_blank');
+    }
+
+    mapSquare.addEventListener('click', openMaps);
+    mapOpenLink.addEventListener('click', (e)=>{
+      e.preventDefault();
+      openMaps();
+    });
+  </script>
+</body>
+</html>
